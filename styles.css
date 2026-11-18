@@ -232,9 +232,37 @@ a:hover { text-decoration-color: var(--ink); }
 
 .project-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
   gap: 2rem;
 }
+
+.filter-bar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  margin-bottom: 2rem;
+}
+
+.filter-btn {
+  font: inherit;
+  font-weight: 600;
+  color: var(--ink);
+  padding: 0.45rem 1.1rem;
+  background: var(--paper);
+  border: 2px solid var(--ink);
+  border-radius: 999px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.filter-btn:hover { background: var(--butter); }
+
+.filter-btn.is-active {
+  background: var(--peach);
+}
+
+/* Without this, the card's display: flex would override the hidden attribute */
+.project-card[hidden] { display: none; }
 
 .project-card {
   position: relative;

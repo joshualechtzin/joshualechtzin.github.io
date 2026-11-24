@@ -1,28 +1,53 @@
 /* =========================================================
-   PORTFOLIO STYLES
+   PORTFOLIO STYLES (dark, earthy theme)
    Change the colors and fonts in :root to restyle the site.
    ========================================================= */
 
 :root {
-  /* Medium-brightness pastels */
-  --sky:      #b4d0e6;   /* landing section */
-  --sage:     #bcd9bf;   /* projects section */
-  --lilac:    #d3c8ea;   /* resume section */
-  --peach:    #f2aa8f;   /* buttons, highlights */
-  --butter:   #ecd088;   /* tags */
-  --paper:    rgba(255, 255, 255, 0.62);  /* card surface */
+  color-scheme: dark;
+
+  /* Page background: one continuous gradient, a deep forest green-gray */
+  --bg-top:    #111916;
+  --bg-mid:    #172420;
+  --bg-bottom: #111916;
+
+  /* Surfaces and lines (warm-tinted so they sit well on the green) */
+  --surface:        rgba(236, 230, 216, 0.045);   /* cards, panels */
+  --surface-hover:  rgba(236, 230, 216, 0.09);
+  --line:           rgba(236, 230, 216, 0.13);    /* thin borders */
 
   /* Text */
-  --ink:      #2c3650;   /* main text (deep blue-slate, softer than black) */
-  --ink-soft: #4d5873;   /* secondary text */
+  --text:      #ece7da;
+  --text-soft: #a1aa9f;
 
-  /* Fonts */
+  /* Accent: muted copper, like road lines on a topographic map */
+  --accent:      #d89b68;
+  --accent-ink:  #1c120a;                         /* text on top of the accent */
+  --accent-soft: rgba(216, 155, 104, 0.12);
+  --accent-line: rgba(216, 155, 104, 0.32);
+
+  /* Secondary: sage green, like vegetation shading */
+  --sage:        #a9c1a5;
+  --sage-soft:   rgba(169, 193, 165, 0.10);
+  --sage-line:   rgba(169, 193, 165, 0.28);
+
+  /* Soft terrain shading behind the page (0 turns it off) */
+  --relief-opacity: 0.1;
+
+  /* Optional photo behind the landing section. Save a photo at images/hero-bg.jpg
+     (aerial, satellite, or terrain imagery works well). If the file doesn't exist,
+     nothing shows and the page looks fine without it. */
+  --hero-photo: url("images/hero-bg.jpg");
+  --hero-photo-opacity: 0.3;
+
+  /* Fonts: serif headings, sans-serif body (all system fonts, nothing to download) */
   --font-system: system-ui, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+  --font-serif: "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, "Times New Roman", serif;
   --font-head: var(--font-system);
   --font-body: var(--font-system);
 
   --nav-height: 64px;
-  --radius: 18px;
+  --radius: 10px;
 }
 
 /* ---------- Base ---------- */
@@ -31,37 +56,59 @@
 html {
   scroll-behavior: smooth;
   scroll-padding-top: var(--nav-height);   /* keeps headings clear of the sticky nav */
+  background: var(--bg-top) linear-gradient(180deg, var(--bg-top) 0%, var(--bg-mid) 50%, var(--bg-bottom) 100%);
 }
 
 body {
   margin: 0;
   font-family: var(--font-body);
   font-size: 1.0625rem;
-  line-height: 1.65;
-  color: var(--ink);
-  background: var(--sky);
+  line-height: 1.7;
+  color: var(--text);
+}
+
+/* Soft shaded-relief texture across the whole page, like terrain seen from above.
+   It is generated in code (no image file) and kept very faint. */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  opacity: var(--relief-opacity);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='1600' height='1000' viewBox='0 0 1600 1000' preserveAspectRatio='none'%3E%3Cfilter id='r' x='0' y='0' width='100%25' height='100%25'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.0035 0.005' numOctaves='5' seed='11' result='n'/%3E%3CfeDiffuseLighting in='n' lighting-color='%23cfdcc8' surfaceScale='16' diffuseConstant='1'%3E%3CfeDistantLight azimuth='315' elevation='36'/%3E%3C/feDiffuseLighting%3E%3C/filter%3E%3Crect width='1600' height='1000' filter='url(%23r)'/%3E%3C/svg%3E");
+  background-size: cover;
+  background-position: center;
 }
 
 h1, h2, h3, h4 {
   font-family: var(--font-head);
-  line-height: 1.15;
+  line-height: 1.2;
   margin: 0 0 0.5em;
+  color: #fff;
+  font-weight: 600;
 }
 
-h1 { font-size: clamp(1.0rem, 2vw, 3.6rem); font-weight: 700; letter-spacing: -0.02em; }
-h2 { font-size: clamp(1.8rem, 3.5vw, 2.5rem); font-weight: 700; letter-spacing: -0.01em; }
-h3 { font-size: 1.35rem; font-weight: 700; }
-h4 { font-size: 1.05rem; font-weight: 600; }
+h1 { font-size: clamp(1.0rem, 2vw, 3.6rem); letter-spacing: -0.01em; }
+h2 { font-size: clamp(1.8rem, 3.5vw, 2.5rem); letter-spacing: -0.01em; }
+h3 { font-size: 1.3rem; }
+h4 { font-size: 1.05rem; }
 
 p { margin: 0 0 1em; max-width: 62ch; }
 ul, ol { margin: 0; padding: 0; }
 img { max-width: 100%; display: block; }
 
-a { color: var(--ink); text-decoration-color: var(--peach); text-decoration-thickness: 2px; text-underline-offset: 3px; }
-a:hover { text-decoration-color: var(--ink); }
+a {
+  color: var(--text);
+  text-decoration-color: var(--accent-line);
+  text-decoration-thickness: 1px;
+  text-underline-offset: 4px;
+  transition: color 0.2s, text-decoration-color 0.2s;
+}
+a:hover { color: var(--accent); text-decoration-color: var(--accent); }
 
 :focus-visible {
-  outline: 3px solid var(--ink);
+  outline: 2px solid var(--accent);
   outline-offset: 3px;
   border-radius: 4px;
 }
@@ -72,11 +119,24 @@ a:hover { text-decoration-color: var(--ink); }
 }
 
 .section {
+  position: relative;
   padding: clamp(3.5rem, 8vw, 6rem) 0;
 }
 
+/* A faint fading line between sections, instead of a change of background color */
+.section + .section::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: min(1800px, 100% - 3rem);
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--line), transparent);
+}
+
 .section-intro {
-  color: var(--ink-soft);
+  color: var(--text-soft);
   margin-bottom: 2.5rem;
 }
 
@@ -86,10 +146,10 @@ a:hover { text-decoration-color: var(--ink); }
   top: 0;
   z-index: 100;
   height: var(--nav-height);
-  background: rgba(255, 255, 255, 0.78);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  border-bottom: 2px solid var(--ink);
+  background: rgba(17, 25, 22, 0.78);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border-bottom: 1px solid var(--line);
 }
 
 .nav {
@@ -103,50 +163,66 @@ a:hover { text-decoration-color: var(--ink); }
 
 .nav-brand {
   font-family: var(--font-head);
-  font-weight: 700;
+  font-weight: 600;
   font-size: 1.2rem;
+  letter-spacing: 0.01em;
+  color: #fff;
   text-decoration: none;
 }
+
+.nav-brand:hover { color: #fff; }
 
 .nav-links {
   list-style: none;
   display: flex;
-  gap: 0.35rem;
+  gap: 0.25rem;
 }
 
 .nav-links a {
   display: block;
-  padding: 0.45rem 1rem;
-  border-radius: 999px;
+  padding: 0.45rem 0.95rem;
+  border-radius: 8px;
   text-decoration: none;
+  font-size: 0.95rem;
   font-weight: 500;
-  transition: background-color 0.2s;
+  color: var(--text-soft);
+  transition: background-color 0.2s, color 0.2s;
 }
 
-.nav-links a:hover { background: var(--butter); }
+.nav-links a:hover { background: var(--surface-hover); color: #fff; }
 
 /* ---------- Buttons and links ---------- */
 .button {
   display: inline-block;
-  padding: 0.75rem 1.6rem;
-  background: var(--peach);
-  color: var(--ink);
+  padding: 0.7rem 1.5rem;
+  background: var(--accent);
+  color: var(--accent-ink);
   font-weight: 600;
   text-decoration: none;
-  border: 2px solid var(--ink);
-  border-radius: 999px;
-  box-shadow: 3px 3px 0 var(--ink);
-  transition: transform 0.15s, box-shadow 0.15s;
+  border: 1px solid var(--accent);
+  border-radius: 8px;
+  transition: transform 0.2s, background-color 0.2s;
 }
 
 .button:hover {
-  transform: translate(2px, 2px);
-  box-shadow: 1px 1px 0 var(--ink);
+  color: var(--accent-ink);
+  background: #e3ac7c;
+  transform: translateY(-2px);
 }
 
-.button-light { background: #fff; }
+/* Secondary button (used for "Download PDF") */
+.button-light {
+  background: transparent;
+  color: var(--text);
+  border-color: var(--line);
+}
 
-.text-link { font-weight: 600; }
+.button-light:hover {
+  color: #fff;
+  background: var(--surface-hover);
+}
+
+.text-link { font-weight: 600; color: var(--accent); }
 
 /* ---------- Tags ---------- */
 .tags {
@@ -158,25 +234,39 @@ a:hover { text-decoration-color: var(--ink); }
 }
 
 .tags li {
-  padding: 0.2rem 0.8rem;
-  background: var(--butter);
-  border-radius: 999px;
-  font-size: 0.9rem;
+  padding: 0.2rem 0.7rem;
+  background: var(--sage-soft);
+  color: var(--sage);
+  border: 1px solid var(--sage-line);
+  border-radius: 5px;
+  font-size: 0.85rem;
   font-weight: 500;
 }
 
 /* ---------- Section 1: Landing ---------- */
 .hero {
-  background-color: var(--sky);
-  /* Topographic contour lines as a quiet background nod to GIS work */
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='900' height='700' viewBox='0 0 900 700' fill='none' stroke='%23ffffff' stroke-opacity='0.55' stroke-width='2'%3E%3Cpath d='M620 90c90-20 190 40 200 130s-50 170-140 200-190-10-230-90 80-220 170-240z'/%3E%3Cpath d='M630 140c70-12 140 35 148 102s-38 128-104 150-142-8-172-68 58-170 128-184z'/%3E%3Cpath d='M640 190c50-6 92 28 96 76s-28 88-76 102-98-8-118-50 38-120 98-128z'/%3E%3Cpath d='M650 235c28-2 50 18 52 44s-16 48-42 56-54-4-64-27 22-68 54-73z'/%3E%3Cpath d='M60 480c80-50 200-30 260 40s40 160-30 200-190 20-250-30-60-160 20-210z'/%3E%3Cpath d='M95 520c60-34 146-18 190 34s30 118-22 148-140 14-184-24-44-118 16-158z'/%3E%3Cpath d='M130 560c40-20 96-8 124 26s18 78-16 98-92 10-120-16-28-78 12-108z'/%3E%3C/svg%3E");
-  background-repeat: no-repeat;
-  background-size: cover;
-  background-position: center;
   min-height: calc(100vh - var(--nav-height));
   display: flex;
   align-items: center;
 }
+
+/* Optional background photo for the landing section, fading into the page at the bottom */
+.hero::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background-image: var(--hero-photo);
+  background-size: cover;
+  background-position: center;
+  opacity: var(--hero-photo-opacity);
+  filter: saturate(0.7);
+  -webkit-mask-image: linear-gradient(180deg, #000 35%, transparent 100%);
+          mask-image: linear-gradient(180deg, #000 35%, transparent 100%);
+}
+
+.hero > .container { position: relative; z-index: 1; }
 
 .hero-grid {
   display: grid;
@@ -188,13 +278,15 @@ a:hover { text-decoration-color: var(--ink); }
 .lead {
   font-size: 1.25rem;
   font-weight: 500;
+  color: var(--sage);
 }
 
 .contact-list {
   list-style: none;
   margin: 1.5rem 0 2rem;
   padding: 1.1rem 1.4rem;
-  background: var(--paper);
+  background: var(--surface);
+  border: 1px solid var(--line);
   border-radius: var(--radius);
   display: grid;
   gap: 0.35rem;
@@ -205,7 +297,7 @@ a:hover { text-decoration-color: var(--ink); }
   display: inline-block;
   margin-right: 0.5rem;
   font-weight: 600;
-  color: var(--ink-soft);
+  color: var(--text-soft);
 }
 
 .hero-photo {
@@ -213,12 +305,11 @@ a:hover { text-decoration-color: var(--ink); }
   max-width: 380px;
   width: 100%;
   justify-self: center;
-  background: var(--lilac);
-  border: 2px solid var(--ink);
-  /* soft organic shape, like a land parcel */
-  border-radius: 58% 42% 46% 54% / 46% 54% 46% 54%;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
   overflow: hidden;
-  box-shadow: 8px 8px 0 var(--peach);
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.45);
 }
 
 .hero-photo img {
@@ -228,8 +319,6 @@ a:hover { text-decoration-color: var(--ink); }
 }
 
 /* ---------- Section 2: Projects ---------- */
-.projects { background: var(--sage); }
-
 .project-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
@@ -239,26 +328,29 @@ a:hover { text-decoration-color: var(--ink); }
 .filter-bar {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.6rem;
+  gap: 0.5rem;
   margin-bottom: 2rem;
 }
 
 .filter-btn {
   font: inherit;
-  font-weight: 600;
-  color: var(--ink);
-  padding: 0.45rem 1.1rem;
-  background: var(--paper);
-  border: 2px solid var(--ink);
-  border-radius: 999px;
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: var(--text-soft);
+  padding: 0.4rem 1rem;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 8px;
   cursor: pointer;
-  transition: background-color 0.2s;
+  transition: background-color 0.2s, color 0.2s, border-color 0.2s;
 }
 
-.filter-btn:hover { background: var(--butter); }
+.filter-btn:hover { background: var(--surface-hover); color: #fff; }
 
 .filter-btn.is-active {
-  background: var(--peach);
+  background: var(--accent);
+  border-color: var(--accent);
+  color: var(--accent-ink);
 }
 
 /* Without this, the card's display: flex would override the hidden attribute */
@@ -269,7 +361,7 @@ a:hover { text-decoration-color: var(--ink); }
   isolation: isolate;               /* keeps the shadow layer inside the card */
   display: flex;
   flex-direction: column;
-  border: 2px solid transparent;    /* the visible border is drawn by ::after below */
+  border: 1px solid transparent;    /* the visible border is drawn by ::after below */
   border-radius: var(--radius);
   cursor: pointer;
   transition: transform 0.3s ease;
@@ -282,13 +374,13 @@ a:hover { text-decoration-color: var(--ink); }
   inset: 0;
   z-index: -1;
   border-radius: var(--radius);
-  background-color: rgba(44, 54, 80, 0.25);          /* fallback if --map isn't set */
+  background-color: rgba(216, 155, 104, 0.14);       /* fallback if --map isn't set */
   background-image: var(--map);
   background-size: cover;
   background-position: center;
-  filter: blur(20px);
-  opacity: 0.5;
-  transform: translateY(16px) scale(0.94);
+  filter: blur(22px);
+  opacity: 0.45;
+  transform: translateY(14px) scale(0.94);
   transition: opacity 0.3s ease, transform 0.3s ease;
 }
 
@@ -296,40 +388,45 @@ a:hover { text-decoration-color: var(--ink); }
 .project-card::after {
   content: "";
   position: absolute;
-  inset: -2px;
+  inset: -1px;
   z-index: 2;
-  border: 2px solid var(--ink);
+  border: 1px solid var(--line);
   border-radius: var(--radius);
   pointer-events: none;
+  transition: border-color 0.3s ease;
 }
 
 /* Floating effect on hover and keyboard focus */
 .project-card:hover,
 .project-card:focus-within {
-  transform: translateY(-8px) scale(1.02);
+  transform: translateY(-6px) scale(1.015);
 }
 
 .project-card:hover::before,
 .project-card:focus-within::before {
-  opacity: 0.9;
-  transform: translateY(26px) scale(0.96);
+  opacity: 0.8;
+  transform: translateY(24px) scale(0.96);
 }
 
-/* Stretch the "View full project" link over the whole card */
+.project-card:hover::after,
+.project-card:focus-within::after {
+  border-color: var(--accent-line);
+}
+
+/* Stretch the "View details" link over the whole card */
 .project-card .text-link::after {
   content: "";
   position: absolute;
   inset: 0;
 }
 
-
 .map-frame {
   margin: 0;
   aspect-ratio: 16 / 10;
-  background: var(--sky);
-  border-bottom: 2px solid var(--ink);
+  background: var(--surface);
+  border-bottom: 1px solid var(--line);
   overflow: hidden;
-  border-radius: calc(var(--radius) - 2px) calc(var(--radius) - 2px) 0 0;
+  border-radius: calc(var(--radius) - 1px) calc(var(--radius) - 1px) 0 0;
 }
 
 .map-frame img,
@@ -341,19 +438,20 @@ a:hover { text-decoration-color: var(--ink); }
   object-position: center top;
 }
 
+/* Dark see-through layer: the blurred map shows faintly behind the text */
 .project-body {
   padding: 1.4rem 1.5rem 1.6rem;
   display: flex;
   flex-direction: column;
   flex: 1;
-  background: rgba(255, 255, 255, 0.3);
-  border-radius: 0 0 calc(var(--radius) - 2px) calc(var(--radius) - 2px);
+  background: rgba(13, 20, 17, 0.64);
+  border-radius: 0 0 calc(var(--radius) - 1px) calc(var(--radius) - 1px);
 }
 
 .project-body h3 { margin-bottom: 0.2rem; }
 
 .project-meta {
-  color: var(--ink-soft);
+  color: var(--text-soft);
   font-size: 0.95rem;
   margin-bottom: 0.9rem;
 }
@@ -361,8 +459,6 @@ a:hover { text-decoration-color: var(--ink); }
 .project-body .text-link { margin-top: auto; }
 
 /* ---------- Section 3: Resume ---------- */
-.resume { background: var(--lilac); }
-
 .resume-header {
   display: flex;
   flex-wrap: wrap;
@@ -382,9 +478,9 @@ a:hover { text-decoration-color: var(--ink); }
 }
 
 .resume-heading {
-  padding-bottom: 0.4rem;
+  padding-bottom: 0.5rem;
   margin-bottom: 1.25rem;
-  border-bottom: 2px solid var(--ink);
+  border-bottom: 1px solid var(--line);
 }
 
 .timeline {
@@ -401,13 +497,13 @@ a:hover { text-decoration-color: var(--ink); }
 
 .timeline-dates {
   font-weight: 600;
-  color: var(--ink-soft);
-  font-size: 0.95rem;
+  color: var(--sage);
+  font-size: 0.9rem;
   padding-top: 0.2rem;
 }
 
 .timeline-org {
-  color: var(--ink-soft);
+  color: var(--text-soft);
   margin-bottom: 0.6rem;
 }
 
@@ -422,25 +518,24 @@ a:hover { text-decoration-color: var(--ink); }
 }
 
 .resume-side {
-  background: var(--paper);
-  border: 2px solid var(--ink);
+  background: var(--surface);
+  border: 1px solid var(--line);
   border-radius: var(--radius);
   padding: 1.75rem;
 }
 
 .skill-group { margin-bottom: 1.5rem; }
 .skill-group h4 { margin-bottom: 0.6rem; }
-.resume-side .tags li { background: var(--sage); }
 
 .plain-list { list-style: none; }
 .plain-list li { margin-bottom: 0.5rem; }
 
 /* ---------- Footer ---------- */
 .site-footer {
-  background: var(--ink);
-  color: #fff;
+  border-top: 1px solid var(--line);
+  color: var(--text-soft);
   padding: 1.5rem 0;
-  font-size: 0.95rem;
+  font-size: 0.9rem;
 }
 
 .site-footer p { margin: 0; max-width: none; }
@@ -467,7 +562,7 @@ a:hover { text-decoration-color: var(--ink); }
 
 @media (max-width: 480px) {
   .nav-brand { font-size: 1.05rem; }
-  .nav-links a { padding: 0.4rem 0.65rem; font-size: 0.95rem; }
+  .nav-links a { padding: 0.4rem 0.65rem; font-size: 0.9rem; }
   .contact-label { display: block; min-width: 0; }
 }
 
